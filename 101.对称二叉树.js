@@ -47,7 +47,40 @@
  * @param {TreeNode} root
  * @return {boolean}
  */
+// var isSymmetric = function(root) {
+//   const isMirror = (t1, t2) => {
+//     if (!t1 && !t2) {
+//       return true;
+//     }
+//     if (!t1 || !t2) {
+//       return false;
+//     }
+//     if (t1.val === t2.val && isMirror(t1.left, t2.right) && isMirror(t1.right, t2.left)) {
+//       return true;
+//     }
+//     return false;
+//   }
+//   return isMirror(root, root);
+// };
 var isSymmetric = function(root) {
-    
+  const queue = [root, root];
+  while (queue.length) {
+    const t1 = queue.shift();
+    const t2 = queue.shift();
+    if (!t1 && !t2) {
+      continue;
+    }
+    if (!t1 || !t2) {
+      return false;
+    }
+    if (t1.val !== t2.val) {
+      return false;
+    }
+    queue.push(t1.left);
+    queue.push(t2.right);
+    queue.push(t1.right);
+    queue.push(t2.left);
+  }
+  return true;
 };
 
