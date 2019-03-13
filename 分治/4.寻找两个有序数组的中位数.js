@@ -41,27 +41,26 @@
  */
 var findMedianSortedArrays = function(nums1, nums2) {
     const m = nums1.length, n = nums2.length;
-    // 分别找第 (m+n+1) / 2 个，和 (m+n+2) / 2 个，然后求其平均值即可，这对奇偶数均适用
-    let l = Number.parseInt((m + n + 1) / 2), r = Number.parseInt((m + n + 2) / 2);
-    const findKth = (nums1, i, nums2, j, k) => {
-      if (i >= nums1.length) { // nums1 中的所有数字被淘汰，i 代表 nums1 的起始位置
-        return nums2[j + k - 1];
+    // 分别找第 (m+n+1) / 2 个和 (m+n+2) / 2 个，然后求其平均值即可，这对奇偶数均适用
+    const l = Number.parseInt((m + n + 1) / 2);
+    const r = Number.parseInt((m + n + 2) / 2);
+    const findKth = (a1, i, a2, j, k) => {
+      if (i > a1.length - 1) { // a1 中的所有数字被淘汰，i 代表 a1 的起始位置
+        return a2[j + k - 1];
       }
-      if (j >= nums2.length) { // nums2 中的所有数字被淘汰，j 代表 nums2 的起始位置
-        return nums1[i + k - 1];
+      if (j > a2.length - 1) {
+        return a1[i + k - 1];
       }
-      if (k == 1) { // K = 1 的话，比较 nums1 和 nums2 的起始位置 i 和 j 上的数字
-        return Math.min(nums1[i], nums2[j]);
+      if (k === 1) { // k = 1 的话，比较 a1 和 a2 的起始位置 i 和 j 上的数字
+        return Math.min(a1[i], a2[j]);
       }
       let mid = Number.parseInt(k / 2);
-      let x1 = i + mid - 1 < nums1.length ? 
-        nums1[i + mid - 1] : Number.MAX_VALUE;
-      let x2 = j + mid - 1 < nums2.length ? 
-        nums2[j + mid - 1] : Number.MAX_VALUE;
-      if (x1 < x2) { // 中位数 x1 比较小时，淘汰 nums1 前面 k / 2 个数字，为啥？
-          return findKth(nums1, i + mid, nums2, j, k - mid);
+      let x1 = i + mid - 1 < a1.length ? a1[i + mid - 1] : Number.MAX_VALUE;
+      let x2 = j + mid - 1 < a2.length ? a2[j + mid - 1] : Number.MAX_VALUE;
+      if (x1 < x2) { // 中位数 x1 比较小时，淘汰 a1 前面 k / 2 个数字，为啥？
+        return findKth(a1, i + mid, a2, j, k - mid);
       }
-      return findKth(nums1, i, nums2, j + mid, k - mid);
+      return findKth(a1, i, a2, j + mid, k - mid);
     }
     return (findKth(nums1, 0, nums2, 0, l) + findKth(nums1, 0, nums2, 0, r)) / 2;
 };
